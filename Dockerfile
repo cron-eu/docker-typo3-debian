@@ -21,16 +21,19 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # allow su to www-data
 RUN chsh -s /bin/bash www-data ; chown www-data /var/www -R ; mkdir -p /var/www/bin
 
-# VOLUME /var/www
+VOLUME /var/www
+RUN apt-get update \
+  && apt-get install rsync -y \
+  && rm -rf /var/lib/apt/lists/*
+COPY /init.sh /
+CMD /init.sh
 
 # Install latest TYPO3
 ENV TYPO3_DISTRIBUTION typo3/cms-base-distribution:8.7
 COPY install-typo3.sh /var/www/bin/install-typo3.sh
+
 RUN apt-get update \
   && apt-get install sudo \
-  && mkdir -p /var/www-provisioned && chown www-data -R /var/www-provisioned \
-  && sudo -u www-data /var/www/bin/install-typo3.sh ${TYPO3_DISTRIBUTION} /var/www/html \
+  && mkdir -p /var/www-orig/html && chown www-data -R /var/www-orig \
+  && sudo -u www-data /var/www/bin/install-typo3.sh ${TYPO3_DISTRIBUTION} /var/www-orig/html \
   && rm -rf /var/lib/apt/lists/*
-
-# Start apache
-CMD apachectl -D FOREGROUND

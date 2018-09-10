@@ -10,7 +10,7 @@ TYPO3_DISTRIBUTION="$1" ; shift
 INSTALL_PATH="$1" ; shift
 
 cd "${INSTALL_PATH}" || exit 1
-rm *
+rm -f *
 
 composer create-project ${TYPO3_DISTRIBUTION} .
 touch web/FIRST_INSTALL

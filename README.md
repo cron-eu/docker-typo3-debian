@@ -23,6 +23,8 @@ services:
       - '8000:80'
     links:
       - db
+    volumes:
+      - data:/var/www
   db:
     # see https://hub.docker.com/_/mysql/
     image: mysql:latest
@@ -33,6 +35,9 @@ services:
       MYSQL_DATABASE: typo3app
       MYSQL_USER: typo3app
       MYSQL_PASSWORD: "typo3app"
+
+volumes:
+  data:
 EOF
 ```
 
@@ -59,7 +64,7 @@ Development
 ### Build this image locally
 
 ```
-docker build -t typo3-debian:latest ./app
+docker build -t typo3-debian:latest .
 ```
 
 Author

@@ -15,7 +15,6 @@ jobs:
           background: true
           command: |
             docker run --name=web typo3-debian
-      - run: while true; do if docker logs web 2>&1 | grep "ready to handle connections"; then break; else echo "Waiting for web container to finish provisioning..." && sleep 10; fi done
       - run:
           name: Do basic front-end tests
           command: |

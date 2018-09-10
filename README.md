@@ -46,7 +46,7 @@ EOF
 Open a Web-Browser
 
 ```
-open http://$(docker-machine ip $DOCKER_MACHINE_NAME):8000/web/
+open http://$(docker-machine ip $DOCKER_MACHINE_NAME):8000/
 ```
 
 Configure the site using the above credentials for the MySQL Database:

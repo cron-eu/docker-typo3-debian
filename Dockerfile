@@ -37,3 +37,7 @@ RUN apt-get update \
   && mkdir -p /var/www-orig/html && chown www-data -R /var/www-orig \
   && sudo -u www-data /var/www/bin/install-typo3.sh ${TYPO3_DISTRIBUTION} /var/www-orig/html \
   && rm -rf /var/lib/apt/lists/*
+
+# Configure apache web root
+COPY configure-apache.sh /
+RUN /configure-apache.sh

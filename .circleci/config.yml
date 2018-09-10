@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build-and-test:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: Build the docker image
+          command: docker build --tag=typo3-debian .
+      - run:
+          name: Run the docker web container
+          background: true
+          command: |
+            docker run --name=web typo3-debian
+      - run: while true; do if docker logs web 2>&1 | grep "ready to handle connections"; then break; else echo "Waiting for web container to finish provisioning..." && sleep 10; fi done
+      - run:
+          name: Do basic front-end tests
+          command: |
+            docker run --rm --volumes-from=web --link=web alpine /bin/sh -c 'apk add curl wget -q \
+             && wget -q --retry-connrefused --waitretry=4 --read-timeout=60 \
+               --timeout=60 -t 300 http://web -O- >/dev/null \
+             && curl -s -L --head http://web | grep "HTTP/1.1 200 OK" \
+             && curl -s -L http://web | grep "Installing TYPO3 CMS"'
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build-and-test

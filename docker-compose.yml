@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   web:
-    image: typo3-debian:latest
+    image: remuslazar/typo3-debian:latest
     ports:
       - '8000:80'
     links:

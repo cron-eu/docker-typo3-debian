@@ -18,7 +18,7 @@ cat <<EOF >docker-compose.yml
 version: '3.1'
 services:
   web:
-    image: typo3-debian:latest
+    image: remuslazar/typo3-debian:latest
     ports:
       - '8000:80'
     links:
@@ -41,9 +41,15 @@ volumes:
 EOF
 ```
 
-### TYPO3 Site Configuration
+### Run Docker Compose Up
 
-Open a Web-Browser
+```bash
+docker-compose up -d
+```
+
+Wait a little bit for the container to initialize and then:
+
+### Access TYPO3 Site Configuration Wizard
 
 ```
 open http://$(docker-machine ip $DOCKER_MACHINE_NAME):8000/
@@ -64,7 +70,7 @@ Development
 ### Build this image locally
 
 ```
-docker build -t typo3-debian:latest .
+docker build -t remuslazar/typo3-debian:latest .
 ```
 
 Author
